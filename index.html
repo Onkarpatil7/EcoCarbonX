@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Carbonex Login</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  >
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+  <!-- LEFT SIDE -->
+
+  <div class="left-panel">
+
+    <div class="logo-circle">
+      🌍
+    </div>
+
+    <h1>Carbonex</h1>
+
+    <p>
+      Smart Carbon Emission Tracking & Prediction Platform
+    </p>
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+
+  <div class="right-panel">
+
+    <div class="login-box">
+
+      <h2>Login</h2>
+
+      <!-- USER TYPE -->
+
+      <select id="userType">
+
+        <option value="admin">
+          Admin
+        </option>
+
+        <option value="company">
+          Company
+        </option>
+
+      </select>
+
+      <!-- EMAIL -->
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter Email"
+      >
+
+      <!-- PASSWORD -->
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter Password"
+      >
+
+      <!-- LOGIN BUTTON -->
+
+      <button onclick="loginUser()">
+        Login
+      </button>
+
+      <!-- REGISTER BUTTON -->
+
+      <button class="register-btn" onclick="registerUser()">
+        Register
+      </button>
+
+      <p id="message"></p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+  <title>Carbonex Admin Dashboard</title>
+
+  <link rel="stylesheet" href="admin.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+
+  <div class="sidebar">
+
+    <div class="logo-section">
+
+      <div class="logo-circle">🌍</div>
+
+      <h1>Carbonex</h1>
+
+      <p>Admin Panel</p>
+
+    </div>
+
+    <ul class="menu">
+
+      <li class="menu-item active"
+      data-section="dashboard-section">
+        Dashboard
+      </li>
+
+      <li class="menu-item"
+      data-section="companies-section">
+        Companies
+      </li>
+
+      <li class="menu-item"
+      data-section="emissions-section">
+        Emissions
+      </li>
+
+      <li class="menu-item"
+      data-section="marketplace-section">
+      Carbon Marketplace
+      </li>
+
+      <li class="menu-item"
+      data-section="prediction-section">
+        Predictions
+      </li>
+
+      <li class="menu-item"
+      data-section="reports-section">
+        Reports
+      </li>
+
+      <li class="menu-item"
+      data-section="analytics-section">
+        Analytics
+      </li>
+
+      <li class="menu-item"
+      data-section="settings-section">
+        Settings
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+
+  <div class="main-content">
+
+    <!-- DASHBOARD -->
+
+    <div id="dashboard-section"
+    class="content-section">
+
+      <div class="header">
+
+        <div>
+          <h2>Admin Dashboard</h2>
+          <p>Welcome Admin</p>
+        </div>
+
+        <div class="search-box">
+          <input type="text"
+          placeholder="Search company...">
+        </div>
+
+      </div>
+
+      <!-- CARDS -->
+
+      <div class="cards">
+
+        <div class="card green">
+          <h4>Total Companies</h4>
+          <h2>128</h2>
+        </div>
+
+        <div class="card blue">
+          <h4>Total Emission</h4>
+          <h2>12,540</h2>
+        </div>
+
+        <div class="card orange">
+          <h4>Total Tokens</h4>
+          <h2>8,450</h2>
+        </div>
+
+        <div class="card purple">
+          <h4>Green Score</h4>
+          <h2>78%</h2>
+        </div>
+
+      </div>
+
+      <!-- CHARTS -->
+
+      <div class="chart-grid">
+
+        <div class="chart-box large">
+
+          <div class="box-header">
+            <h3>Carbon Emission Trend</h3>
+          </div>
+
+          <canvas id="lineChart"></canvas>
+
+        </div>
+
+        <div class="chart-box">
+
+          <div class="box-header">
+            <h3>Industry Emission</h3>
+          </div>
+
+          <canvas id="pieChart"></canvas>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- COMPANIES SECTION -->
+
+    <div id="companies-section"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-box">
+
+        <h2>Company Management</h2>
+
+        <div class="company-form">
+
+          <input type="text"
+          id="companyName"
+          placeholder="Company Name">
+
+          <input type="text"
+          id="companyIndustry"
+          placeholder="Industry">
+
+          <button onclick="addCompany()">
+            Add Company
+          </button>
+
+        </div>
+
+        <table id="companyTable">
+
+          <tr>
+            <th>Company</th>
+            <th>Industry</th>
+            <th>Action</th>
+          </tr>
+
+          <tr>
+            <td>ABC Industries</td>
+            <td>Manufacturing</td>
+
+            <td>
+              <button class="delete-btn">
+                Delete
+              </button>
+            </td>
+
+          </tr>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <!-- EMISSIONS SECTION -->
+
+    <div id="emissions-section"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-box">
+
+        <h2>Emission Analytics</h2>
+
+        <p>
+          Monthly company emission analysis
+        </p>
+
+        <canvas id="barChart"></canvas>
+
+      </div>
+
+    </div>
+<!-- MARKETPLACE SECTION -->
+
+<div id="marketplace-section"
+class="content-section"
+style="display:none;">
+
+  <div class="section-box">
+
+    <h2>
+      Carbon Marketplace
+    </h2>
+
+    <table>
+
+      <tr>
+        <th>Company</th>
+        <th>Credits</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+
+      <tr>
+
+        <td>EcoTech Industries</td>
+
+        <td>500 Credits</td>
+
+        <td>₹120</td>
+
+        <td>
+
+          <button class="buy-btn">
+            BUY
+          </button>
+
+        </td>
+
+      </tr>
+
+      <tr>
+
+        <td>GreenNova Solutions</td>
+
+        <td>320 Credits</td>
+
+        <td>₹110</td>
+
+        <td>
+
+          <button class="buy-btn">
+            BUY
+          </button>
+
+        </td>
+
+      </tr>
+
+    </table>
+
+  </div>
+
+</div>
+    <!-- PREDICTIONS SECTION -->
+
+    <div id="prediction-section"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-box">
+
+        <h2>Prediction Analytics</h2>
+
+        <div class="prediction-cards">
+
+          <div class="prediction-card">
+
+            <h3>Next Month</h3>
+
+            <h1>
+              2,320 Tons
+            </h1>
+
+          </div>
+
+          <div class="prediction-card">
+
+            <h3>Change</h3>
+
+            <h1 class="red">
+              +7.9%
+            </h1>
+
+          </div>
+
+          <div class="prediction-card">
+
+            <h3>Risk Level</h3>
+
+            <h1 style="color:#f59e0b;">
+              Medium
+            </h1>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- REPORTS SECTION -->
+
+    <div id="reports-section"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-box">
+
+        <h2>Reports</h2>
+
+        <p>
+          Download sustainability and
+          emission reports
+        </p>
+
+        <br>
+
+        <button class="download-btn">
+          Download PDF Report
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- ANALYTICS SECTION -->
+
+    <div id="analytics-section"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-box">
+
+        <h2>Analytics Dashboard</h2>
+
+        <!-- ANALYTICS CARDS -->
+
+        <div class="analytics-grid">
+
+          <div class="analytics-card">
+
+            <h3>Top Polluter</h3>
+
+            <h1 class="red">
+              ABC Industries
+            </h1>
+
+          </div>
+
+          <div class="analytics-card">
+
+            <h3>Lowest Emission</h3>
+
+            <h1 class="green-text">
+              EcoTech
+            </h1>
+
+          </div>
+
+          <div class="analytics-card">
+
+            <h3>Total Tokens Used</h3>
+
+            <h1>
+              8,450
+            </h1>
+
+          </div>
+
+          <div class="analytics-card">
+
+            <h3>Prediction Accuracy</h3>
+
+            <h1 style="color:#3b82f6;">
+              94%
+            </h1>
+
+          </div>
+
+        </div>
+
+        <!-- ANALYTICS CHART -->
+
+        <div style="margin-top:30px;">
+
+          <canvas id="analyticsChart"></canvas>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SETTINGS SECTION -->
+
+    <div id="settings-section"
+    class="content-section"
+    style="display:none;">
+
+      <div class="section-box">
+
+        <h2>Settings</h2>
+
+        <p>
+          Admin settings coming soon.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="admin.js"></script>
+
+</body>
+</html>

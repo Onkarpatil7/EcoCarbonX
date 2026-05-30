@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+  <title>Carbonex Company Dashboard</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial;
+    }
+
+    body{
+      background:#f4f6f9;
+      overflow-x:hidden;
+    }
+
+    .container{
+      display:flex;
+      width:100%;
+    }
+
+    .sidebar{
+      width:260px;
+      height:100vh;
+      background:#022b22;
+      color:white;
+      padding:20px;
+      position:fixed;
+      overflow-y:auto;
+    }
+
+    .logo{
+      text-align:center;
+      margin-bottom:40px;
+    }
+
+    .logo h1{
+      margin-top:10px;
+      font-size:30px;
+    }
+
+    .menu{
+      list-style:none;
+    }
+
+    .menu li{
+      padding:14px;
+      margin-bottom:12px;
+      border-radius:10px;
+      cursor:pointer;
+      transition:0.3s;
+      font-size:15px;
+    }
+
+    .menu li:hover,
+    .active{
+      background:#16a34a;
+    }
+
+    .logout-btn{
+      background:#ef4444;
+      margin-top:25px;
+      text-align:center;
+    }
+
+    .logout-btn:hover{
+      background:#dc2626;
+    }
+
+    .main{
+      margin-left:260px;
+      width:calc(100% - 260px);
+      padding:20px;
+    }
+
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:20px;
+    }
+
+    .search-box input{
+      padding:12px;
+      width:260px;
+      border:none;
+      border-radius:10px;
+      outline:none;
+      background:white;
+    }
+
+    .content-section{
+      display:none;
+    }
+
+    #dashboard-section{
+      display:block;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+      margin-top:25px;
+    }
+
+    .card{
+      padding:25px;
+      border-radius:15px;
+      color:white;
+      transition:0.3s;
+      box-shadow:0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+    }
+
+    .green{
+      background:#16a34a;
+    }
+
+    .blue{
+      background:#3b82f6;
+    }
+
+    .orange{
+      background:#f59e0b;
+    }
+
+    .purple{
+      background:#8b5cf6;
+    }
+
+    .chart-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      margin-top:25px;
+    }
+
+    .chart-box{
+      background:white;
+      padding:20px;
+      border-radius:15px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.05);
+      height:380px;
+    }
+
+    canvas{
+      width:100% !important;
+      height:300px !important;
+    }
+
+    .section{
+      background:white;
+      padding:25px;
+      border-radius:15px;
+      margin-top:25px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.05);
+      overflow-x:auto;
+    }
+
+    .section h2{
+      margin-bottom:20px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th,
+    td{
+      padding:15px;
+      border-bottom:1px solid #ddd;
+      text-align:left;
+    }
+
+    th{
+      background:#f9fafb;
+    }
+
+    tr:hover{
+      background:#f3f4f6;
+    }
+
+    .btn{
+      padding:10px 18px;
+      border:none;
+      border-radius:8px;
+      color:white;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .upload-btn{
+      background:#16a34a;
+    }
+
+    .buy-btn{
+      background:#3b82f6;
+    }
+
+    .sell-btn{
+      background:#ef4444;
+    }
+
+    .token-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+
+    .token-card{
+      background:#f9fafb;
+      padding:25px;
+      border-radius:15px;
+      text-align:center;
+    }
+
+    .token-card h1{
+      margin:15px 0;
+      color:#16a34a;
+    }
+
+    .profile-box{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+
+    .profile-card{
+      background:#f9fafb;
+      padding:20px;
+      border-radius:15px;
+    }
+
+    .profile-card h3{
+      margin-bottom:10px;
+      color:#16a34a;
+    }
+
+    .upload-box{
+      border:2px dashed #16a34a;
+      padding:30px;
+      text-align:center;
+      border-radius:15px;
+      background:#f9fafb;
+    }
+
+    .safe{
+      color:green;
+      font-weight:bold;
+    }
+
+    .critical{
+      color:red;
+      font-weight:bold;
+    }
+
+    .moderate{
+      color:#f59e0b;
+      font-weight:bold;
+    }
+
+    @media(max-width:992px){
+
+      .chart-grid{
+        grid-template-columns:1fr;
+      }
+
+      .profile-box{
+        grid-template-columns:1fr;
+      }
+
+      .token-grid{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+    @media(max-width:768px){
+
+      .container{
+        flex-direction:column;
+      }
+
+      .sidebar{
+        width:100%;
+        height:auto;
+        position:relative;
+      }
+
+      .main{
+        margin-left:0;
+        width:100%;
+      }
+
+      .cards{
+        grid-template-columns:1fr;
+      }
+
+      .search-box input{
+        width:100%;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+
+  <div class="sidebar">
+
+    <div class="logo">
+
+      <h1>🌍 Carbonex</h1>
+
+      <p>Company Dashboard</p>
+
+    </div>
+
+    <ul class="menu">
+
+      <li class="menu-item active"
+      data-section="dashboard-section">
+        Dashboard
+      </li>
+
+      <li class="menu-item"
+      data-section="emission-section">
+        My Emissions
+      </li>
+
+      <li class="menu-item"
+      data-section="prediction-section">
+        Predictions
+      </li>
+
+      <li class="menu-item"
+      data-section="token-section">
+        Buy / Sell Tokens
+      </li>
+
+      <li class="menu-item"
+      data-section="marketplace-section">
+        Carbon Marketplace
+      </li>
+
+      <li class="menu-item"
+      data-section="analytics-section">
+        Smart Analytics
+      </li>
+
+      <li class="menu-item"
+      data-section="risk-section">
+        AI Risk Detection
+      </li>
+
+      <li class="menu-item"
+      data-section="report-section">
+        Reports
+      </li>
+
+      <li class="menu-item"
+      data-section="profile-section">
+        Profile
+      </li>
+
+      <li class="menu-item logout-btn">
+        Logout
+      </li>
+
+    </ul>
+
+  </div>
+
+  <div class="main">
+
+    <!-- DASHBOARD -->
+
+    <div id="dashboard-section"
+    class="content-section">
+
+      <div class="header">
+
+        <div>
+          <h2>Company Dashboard</h2>
+          <p>Welcome Back</p>
+        </div>
+
+        <div class="search-box">
+          <input type="text"
+          placeholder="Search...">
+        </div>
+
+      </div>
+
+      <div class="cards">
+
+        <div class="card green">
+          <h3>My Emissions</h3>
+          <h1>2450</h1>
+          <p>Tons CO₂</p>
+        </div>
+
+        <div class="card blue">
+          <h3>Green Score</h3>
+          <h1>82%</h1>
+          <p>Sustainability</p>
+        </div>
+
+        <div class="card orange">
+          <h3>Tokens Owned</h3>
+          <h1 id="tokenCount">1240</h1>
+          <p>Carbon Tokens</p>
+        </div>
+
+        <div class="card purple">
+          <h3>Sustainability Rank</h3>
+          <h1>#12</h1>
+          <p>Top Companies</p>
+        </div>
+
+      </div>
+
+      <div class="chart-grid">
+
+        <div class="chart-box">
+          <h3>Monthly Emissions</h3>
+          <canvas id="lineChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <h3>Prediction Trend</h3>
+          <canvas id="barChart"></canvas>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- EMISSION -->
+
+    <div id="emission-section"
+    class="content-section">
+
+      <div class="section">
+
+        <h2>Emission Analytics</h2>
+
+        <canvas id="emissionChart"></canvas>
+
+      </div>
+
+    </div>
+
+    <!-- PREDICTION -->
+
+    <div id="prediction-section"
+    class="content-section">
+
+      <div class="section">
+
+        <h2>Future Prediction Reports</h2>
+
+        <table>
+
+          <tr>
+            <th>Month</th>
+            <th>Predicted Emission</th>
+            <th>Trend</th>
+          </tr>
+
+          <tr>
+            <td>June</td>
+            <td>1700 Tons</td>
+            <td class="moderate">
+              Moderate Increase
+            </td>
+          </tr>
+
+          <tr>
+            <td>July</td>
+            <td>1500 Tons</td>
+            <td class="safe">
+              Reduced Emission
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <!-- TOKEN -->
+
+    <div id="token-section"
+    class="content-section">
+
+      <div class="section">
+
+        <h2>Buy / Sell Tokens</h2>
+
+        <div class="token-grid">
+
+          <div class="token-card">
+
+            <h3>Buy Tokens</h3>
+
+            <h1>+100</h1>
+
+            <button class="btn buy-btn">
+              Buy Tokens
+            </button>
+
+          </div>
+
+          <div class="token-card">
+
+            <h3>Sell Tokens</h3>
+
+            <h1>-100</h1>
+
+            <button class="btn sell-btn">
+              Sell Tokens
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- MARKETPLACE -->
+
+    <div id="marketplace-section"
+    class="content-section">
+
+      <div class="section">
+
+        <h2>Carbon Marketplace</h2>
+
+        <table>
+
+          <tr>
+            <th>Company</th>
+            <th>Credits</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+
+          <tr>
+            <td>EcoTech Industries</td>
+            <td>500</td>
+            <td>₹120</td>
+            <td>
+              <button class="btn buy-btn market-buy">
+                BUY
+              </button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>GreenNova</td>
+            <td>320</td>
+            <td>₹110</td>
+            <td>
+              <button class="btn buy-btn market-buy">
+                BUY
+              </button>
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+
+      <div class="chart-grid">
+
+        <div class="chart-box">
+          <h3>Marketplace Distribution</h3>
+          <canvas id="marketPieChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <h3>Trading Growth</h3>
+          <canvas id="marketBarChart"></canvas>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ANALYTICS -->
+
+    <div id="analytics-section"
+    class="content-section">
+
+      <div class="section">
+
+        <h2>Smart Sustainability Analytics</h2>
+
+        <canvas id="analyticsChart"></canvas>
+
+      </div>
+
+    </div>
+
+    <!-- RISK -->
+
+    <div id="risk-section"
+    class="content-section">
+
+      <div class="section">
+
+        <h2>AI Risk Detection</h2>
+
+        <table>
+
+          <tr>
+            <th>Department</th>
+            <th>Risk Score</th>
+            <th>Status</th>
+          </tr>
+
+          <tr>
+            <td>Manufacturing</td>
+            <td>92%</td>
+            <td class="critical">Critical</td>
+          </tr>
+
+          <tr>
+            <td>Transport</td>
+            <td>68%</td>
+            <td class="moderate">Moderate</td>
+          </tr>
+
+          <tr>
+            <td>Energy</td>
+            <td>30%</td>
+            <td class="safe">Safe</td>
+          </tr>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <!-- REPORT -->
+
+    <div id="report-section"
+    class="content-section">
+
+      <div class="section">
+
+        <h2>Upload CSV Report</h2>
+
+        <div class="upload-box">
+
+          <h3>Upload Company Emission Data</h3>
+
+          <p>
+            Upload CSV files for analysis
+          </p>
+
+          <input type="file"
+          accept=".csv">
+
+          <br><br>
+
+          <button class="btn upload-btn">
+            Upload CSV
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PROFILE -->
+
+    <div id="profile-section"
+    class="content-section">
+
+      <div class="section">
+
+        <h2>Company Profile</h2>
+
+        <div class="profile-box">
+
+          <div class="profile-card">
+            <h3>Company Name</h3>
+            <p>EcoTech Industries</p>
+          </div>
+
+          <div class="profile-card">
+            <h3>Industry</h3>
+            <p>Manufacturing</p>
+          </div>
+
+          <div class="profile-card">
+            <h3>Email</h3>
+            <p>ecotech@gmail.com</p>
+          </div>
+
+          <div class="profile-card">
+            <h3>Location</h3>
+            <p>Pune, India</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  // SIDEBAR
+
+  const menuItems =
+  document.querySelectorAll(".menu-item");
+
+  const sections =
+  document.querySelectorAll(".content-section");
+
+  menuItems.forEach(item => {
+
+    item.addEventListener("click", () => {
+
+      if(item.classList.contains("logout-btn")){
+
+        const confirmLogout =
+        confirm("Are you sure to logout?");
+
+        if(confirmLogout){
+
+          alert("Logout Successful");
+
+          location.reload();
+
+        }
+
+        return;
+
+      }
+
+      menuItems.forEach(menu => {
+
+        menu.classList.remove("active");
+
+      });
+
+      item.classList.add("active");
+
+      sections.forEach(section => {
+
+        section.style.display = "none";
+
+      });
+
+      const target =
+      item.getAttribute("data-section");
+
+      document.getElementById(target)
+      .style.display = "block";
+
+    });
+
+  });
+
+
+  // LINE CHART
+
+  new Chart(
+    document.getElementById("lineChart"),
+    {
+      type:"line",
+
+      data:{
+        labels:[
+          "Jan","Feb","Mar","Apr",
+          "May","Jun","Jul","Aug",
+          "Sep","Oct","Nov","Dec"
+        ],
+
+        datasets:[{
+
+          label:"Emission",
+
+          data:[
+            1200,1400,1500,1800,
+            1700,2100,1900,1850,
+            1600,1700,1650,1550
+          ],
+
+          borderColor:"#16a34a",
+
+          backgroundColor:
+          "rgba(22,163,74,0.1)",
+
+          fill:true,
+
+          tension:0.4
+
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+
+    }
+  );
+
+
+  // BAR CHART
+
+  new Chart(
+    document.getElementById("barChart"),
+    {
+      type:"bar",
+
+      data:{
+        labels:[
+          "Next 1M",
+          "Next 2M",
+          "Next 3M",
+          "Next 4M"
+        ],
+
+        datasets:[{
+
+          label:"Future Prediction",
+
+          data:[
+            1800,
+            1700,
+            1600,
+            1500
+          ],
+
+          backgroundColor:[
+            "#16a34a",
+            "#3b82f6",
+            "#f59e0b",
+            "#8b5cf6"
+          ],
+
+          borderRadius:8
+
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+
+    }
+  );
+
+
+  // EMISSION CHART
+
+  new Chart(
+    document.getElementById("emissionChart"),
+    {
+      type:"doughnut",
+
+      data:{
+        labels:[
+          "Factory",
+          "Transport",
+          "Energy",
+          "Waste"
+        ],
+
+        datasets:[{
+
+          data:[
+            45,
+            25,
+            20,
+            10
+          ],
+
+          backgroundColor:[
+            "#16a34a",
+            "#3b82f6",
+            "#f59e0b",
+            "#8b5cf6"
+          ]
+
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+
+    }
+  );
+
+
+  // ANALYTICS CHART
+
+  new Chart(
+    document.getElementById("analyticsChart"),
+    {
+      type:"radar",
+
+      data:{
+        labels:[
+          "Energy Saving",
+          "Recycling",
+          "Emission Control",
+          "Water Usage",
+          "Green Score"
+        ],
+
+        datasets:[{
+
+          label:"Sustainability",
+
+          data:[
+            90,
+            82,
+            76,
+            70,
+            88
+          ],
+
+          backgroundColor:
+          "rgba(22,163,74,0.2)",
+
+          borderColor:"#16a34a",
+
+          pointBackgroundColor:"#16a34a"
+
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+
+    }
+  );
+
+
+  // MARKET PIE CHART
+
+  new Chart(
+    document.getElementById("marketPieChart"),
+    {
+      type:"pie",
+
+      data:{
+        labels:[
+          "EcoTech",
+          "GreenNova",
+          "FutureEco"
+        ],
+
+        datasets:[{
+
+          data:[
+            45,
+            35,
+            20
+          ],
+
+          backgroundColor:[
+            "#16a34a",
+            "#3b82f6",
+            "#f59e0b"
+          ]
+
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+
+    }
+  );
+
+
+  // MARKET BAR CHART
+
+  new Chart(
+    document.getElementById("marketBarChart"),
+    {
+      type:"bar",
+
+      data:{
+        labels:[
+          "Jan","Feb","Mar",
+          "Apr","May","Jun"
+        ],
+
+        datasets:[{
+
+          label:"Trading Growth",
+
+          data:[
+            200,
+            400,
+            700,
+            900,
+            1200,
+            1500
+          ],
+
+          backgroundColor:"#16a34a",
+
+          borderRadius:8
+
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+
+    }
+  );
+
+
+  // BUY TOKENS
+
+  document.querySelector(".buy-btn")
+  .addEventListener("click", () => {
+
+    let token =
+    document.getElementById("tokenCount");
+
+    let current =
+    parseInt(token.innerText);
+
+    current += 100;
+
+    token.innerText = current;
+
+    alert("100 Tokens Purchased");
+
+  });
+
+
+  // SELL TOKENS
+
+  document.querySelector(".sell-btn")
+  .addEventListener("click", () => {
+
+    let token =
+    document.getElementById("tokenCount");
+
+    let current =
+    parseInt(token.innerText);
+
+    if(current <= 0){
+
+      alert("No Tokens Left");
+
+      return;
+
+    }
+
+    current -= 100;
+
+    token.innerText = current;
+
+    alert("100 Tokens Sold");
+
+  });
+
+
+  // MARKET BUY
+
+  document.querySelectorAll(".market-buy")
+  .forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      alert(
+        "Carbon Credits Purchased Successfully"
+      );
+
+    });
+
+  });
+
+
+  // CSV UPLOAD
+
+  document.querySelector(".upload-btn")
+  .addEventListener("click", () => {
+
+    alert(
+      "CSV Uploaded Successfully!"
+    );
+
+  });
+
+</script>
+
+</body>
+</html>
