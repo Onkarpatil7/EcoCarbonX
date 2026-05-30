@@ -1,7 +1,4 @@
-# database.py
 from sqlalchemy.orm.session import Session
-
-
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -15,12 +12,33 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_PORT = os.getenv("DB_PORT")
 
+database_url = (
+    f"postgresql://{DB_USER}:{DB_PASSWORD}"
+    f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+)
 
-database_url=f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+engine = create_engine(database_url)
 
-engine=create_engine(database_url)
-sessionLocal=sessionmaker[Session](bind=engine,autoflush=False,autocommit=False)
+sessionLocal = sessionmaker(
+    bind=engine,
+    autoflush=False,
+    autocommit=False
+)
 
-Base=declarative_base()
+Base = declarative_base()
+
+
+# THIS FUNCTION WAS MISSING
+def get_db():
+
+    db = sessionLocal()
+
+    try:
+        yield db
+
+    finally:
+        db.close()
+
 
 print(DB_HOST)
+
