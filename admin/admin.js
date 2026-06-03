@@ -8,7 +8,50 @@ document.querySelectorAll(".menu-item");
 const sections =
 document.querySelectorAll(".content-section");
 
+  menuItems.forEach(item => {
+
+    item.addEventListener("click", () => {
+
+      if(item.classList.contains("logout-btn")){
+
+        const confirmLogout =
+        confirm("Are you sure to logout?");
+
+        if(confirmLogout){
+          location.href = "../index.html";
+
+        }
+
+        return;
+
+      }
+
+      menuItems.forEach(menu => {
+
+        menu.classList.remove("active");
+
+      });
+
+      item.classList.add("active");
+
+      sections.forEach(section => {
+
+        section.style.display = "none";
+
+      });
+
+      const target =
+      item.getAttribute("data-section");
+
+      document.getElementById(target)
+      .style.display = "block";
+
+    });
+
+  });
+
 menuItems.forEach(item => {
+
 
   item.addEventListener("click", () => {
 
@@ -35,6 +78,8 @@ menuItems.forEach(item => {
   });
 
 });
+
+
 
 
 // ==========================

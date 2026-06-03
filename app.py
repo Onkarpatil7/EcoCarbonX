@@ -4,15 +4,11 @@ from sqlalchemy.orm import Session
 
 from database import engine, sessionLocal, Base, get_db
 
-from models import Base, User, Company, Emission, Prediction, Marketplace, Report
+from models import Base, User, CompanyProfile
 from schemas import (
     UserCreate,
     LoginSchema,
-    CompanyCreate,
-    EmissionCreate,
-    PredictionCreate,
-    MarketplaceCreate,
-    ReportCreate
+    CompanyProfileCreate
 )
 
 Base.metadata.create_all(bind=engine)
@@ -80,156 +76,62 @@ def login(data: LoginSchema, db: Session = Depends(get_db)):
         "user_id": user.id
     }
 
-# ==========================
-# COMPANY APIs
-# ==========================
+@app.post("/company/profile")
+def create_company_profile(
+    profile: CompanyProfileCreate,
+    db: Session = Depends(get_db)
+):
 
-@app.post("/companies")
-def create_company(company: CompanyCreate, db: Session = Depends(get_db)):
+    existing_profile = db.query(
+        CompanyProfile
+    ).filter(
+        CompanyProfile.email == profile.email
+    ).first()
 
-    new_company = Company(
-        company_name=company.company_name,
-        industry=company.industry,
-        location=company.location
-    )
+    # UPDATE EXISTING PROFILE
 
-    db.add(new_company)
-    db.commit()
-    db.refresh(new_company)
+    if existing_profile:
 
-    return {
-        "message": "Company created",
-        "data": {
-            "id": new_company.id,
-            "company_name": new_company.company_name
+        existing_profile.company_name = (
+            profile.company_name
+        )
+
+        existing_profile.industry = (
+            profile.industry
+        )
+
+        existing_profile.location = (
+            profile.location
+        )
+
+        db.commit()
+
+        return {
+            "message":
+            "Profile Updated Successfully"
         }
-    }
 
+    # CREATE NEW PROFILE
 
-@app.get("/companies")
-def get_companies(db: Session = Depends(get_db)):
+    new_profile = CompanyProfile(
 
-    companies = db.query(Company).all()
+        company_name = profile.company_name,
 
-    return companies
+        industry = profile.industry,
 
+        location = profile.location,
 
-# ==========================
-# EMISSION APIs
-# ==========================
+        email = profile.email
 
-@app.post("/emissions")
-def add_emission(data: EmissionCreate, db: Session = Depends(get_db)):
-
-    emission = Emission(
-        company_id=data.company_id,
-        month=data.month,
-        emission_value=data.emission_value
     )
 
-    db.add(emission)
+    db.add(new_profile)
+
     db.commit()
-    db.refresh(emission)
+
+    db.refresh(new_profile)
 
     return {
-        "message": "Emission data added",
-        "emission_id": emission.id
+        "message":
+        "Profile Created Successfully"
     }
-
-@app.get("/emissions")
-def get_emissions(db: Session = Depends(get_db)):
-
-    emissions = db.query(Emission).all()
-
-    return emissions
-
-
-# ==========================
-# PREDICTION APIs
-# ==========================
-
-@app.post("/predictions")
-def add_prediction(data: PredictionCreate, db: Session = Depends(get_db)):
-
-    prediction = Prediction(
-        company_id=data.company_id,
-        predicted_month=data.predicted_month,
-        predicted_emission=data.predicted_emission
-    )
-
-    db.add(prediction)
-    db.commit()
-    db.refresh(prediction)
-
-    return {
-        "message": "Prediction added",
-        "prediction_id": prediction.id
-    }
-
-
-@app.get("/predictions")
-def get_predictions(db: Session = Depends(get_db)):
-
-    predictions = db.query(Prediction).all()
-
-    return predictions
-
-
-# ==========================
-# MARKETPLACE APIs
-# ==========================
-
-@app.post("/marketplace")
-def create_marketplace(data: MarketplaceCreate, db: Session = Depends(get_db)):
-
-    marketplace = Marketplace(
-        company_id=data.company_id,
-        token_amount=data.token_amount,
-        price=data.price
-    )
-
-    db.add(marketplace)
-    db.commit()
-    db.refresh(marketplace)
-
-    return {
-        "message": "Marketplace token listed",
-        "marketplace_id": marketplace.id
-    }
-@app.get("/marketplace")
-def get_marketplace(db: Session = Depends(get_db)):
-
-    marketplace = db.query(Marketplace).all()
-
-    return marketplace
-
-
-# ==========================
-# REPORT APIs
-# ==========================
-
-@app.post("/reports")
-def create_report(data: ReportCreate, db: Session = Depends(get_db)):
-
-    report = Report(
-        company_name=data.company_name,
-        report_type=data.report_type,
-        description=data.description
-    )
-
-    db.add(report)
-    db.commit()
-    db.refresh(report)
-
-    return {
-        "message": "Report created",
-        "report_id": report.id
-    }
-
-
-@app.get("/reports")
-def get_reports(db: Session = Depends(get_db)):
-
-    reports = db.query(Report).all()
-
-    return reports

@@ -8,7 +8,7 @@
   <meta name="viewport"
   content="width=device-width, initial-scale=1.0">
 
-  <title>Carbonex Company Dashboard</title>
+  <title>EcoCarbonX Company Dashboard</title>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -277,6 +277,33 @@
       font-weight:bold;
     }
 
+    .profile-box input,
+    .profile-box select{
+      width:100%;
+      padding:14px;
+      margin-bottom:18px;
+      border:none;
+      background:#f3f4f6;
+      border-radius:10px;
+      outline:none;
+}
+
+.profile-btn button{
+  width:100%;
+  padding:14px;
+  border:none;
+  background:#16a34a;
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:16px;
+  margin-top:10px;
+}
+
+.profile-btn button:hover{
+  background:#15803d;
+}
+
     @media(max-width:992px){
 
       .chart-grid{
@@ -347,11 +374,6 @@
         Dashboard
       </li>
 
-      <!-- <li class="menu-item"
-      data-section="emission-section">
-        My Emissions
-      </li> -->
-
       <li class="menu-item"
       data-section="prediction-section">
         Predictions
@@ -369,7 +391,7 @@
 
       <li class="menu-item"
       data-section="risk-section">
-        AI Risk Detection
+        Risk Detection
       </li>
 
       <li class="menu-item"
@@ -632,7 +654,7 @@
 
       <div class="section">
 
-        <h2>AI Risk Detection</h2>
+        <h2>Risk Detection</h2>
 
         <table>
 
@@ -705,33 +727,57 @@
 
       <div class="section">
 
-        <h2>Company Profile</h2>
+  <h2>Company Profile</h2>
 
-        <div class="profile-box">
+  <div class="profile-box">
 
-          <div class="profile-card">
-            <h3>Company Name</h3>
-            <p>EcoTech Industries</p>
-          </div>
+    <div class="profile-card">
 
-          <div class="profile-card">
-            <h3>Industry</h3>
-            <p>Manufacturing</p>
-          </div>
+      <h3>Company Name</h3>
 
-          <div class="profile-card">
-            <h3>Email</h3>
-            <p>ecotech@gmail.com</p>
-          </div>
+      <input
+      type="text"
+      id="companyName"
+      placeholder="Enter Company Name"
+      required>
 
-          <div class="profile-card">
-            <h3>Location</h3>
-            <p>Pune, India</p>
-          </div>
+    </div>
 
-        </div>
+    <div class="profile-card">
 
-      </div>
+      <h3>Industry</h3>
+
+      <input
+      type="text"
+      id="industry"
+      placeholder="Industry Type"
+      required>
+
+    </div>
+
+    <div class="profile-card">
+
+      <h3>Location</h3>
+
+      <input
+      type="text"
+      id="location"
+      placeholder="Company Location"
+      required>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="profile-btn">
+
+  <button onclick="updateProfile()">
+    Update Profile
+  </button>
+
+</div>
 
     </div>
 
@@ -740,6 +786,8 @@
 </div>
 
 <script>
+
+  const API_URL = "http://127.0.0.1:8000";
 
   // SIDEBAR
 
@@ -1130,6 +1178,72 @@
     );
 
   });
+
+
+async function updateProfile(){
+
+    const companyName =
+    document.getElementById("companyName").value;
+
+    const industry =
+    document.getElementById("industry").value;
+
+    const location =
+    document.getElementById("location").value;
+
+    // EMAIL FROM LOGIN
+
+    const email =
+    localStorage.getItem("email");
+
+    const token =
+    localStorage.getItem("token");
+
+    const response = await fetch(
+        `${API_URL}/company/profile`,
+        {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json",
+
+                "Authorization":
+                `Bearer ${token}`
+            },
+
+            body: JSON.stringify({
+
+                company_name: companyName,
+
+                industry: industry,
+
+                location: location,
+
+                email: email
+
+            })
+        }
+    );
+
+    const data = await response.json();
+
+    if(response.ok){
+
+        alert(
+            "Profile Updated Successfully"
+        );
+
+    }
+
+    else{
+
+        alert(
+            data.detail || "Error updating profile"
+        );
+
+    }
+
+}
 
 </script>
 

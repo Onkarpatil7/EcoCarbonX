@@ -34,6 +34,16 @@ body{
   z-index:100;
 }
 
+.logout-btn{
+      background:#ef4444;
+      margin-top:25px;
+      text-align:center;
+    }
+
+    .logout-btn:hover{
+      background:#dc2626;
+    }
+
 .logo-section{
   text-align:center;
   margin-bottom:40px;

@@ -15,20 +15,30 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
-class Company(Base):
-    __tablename__ = "companies"
 
-    id = Column(Integer, primary_key=True, index=True)
-    company_name = Column(String, nullable=False)
-    industry = Column(String)
-    location = Column(String)
-    total_emission = Column(Float, default=0)
-    green_score = Column(Float, default=0)
-    carbon_tokens = Column(Float, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
+class CompanyProfile(Base):
 
-    emissions = relationship("Emission", back_populates="company")
-    predictions = relationship("Prediction", back_populates="company")
-    marketplace = relationship("Marketplace", back_populates="company")
+    __tablename__ = "company_profiles"
 
+    id = Column(Integer,primary_key=True,index=True)
 
+    company_name = Column(
+        String,
+        nullable=False
+    )
+
+    industry = Column(
+        String,
+        nullable=False
+    )
+
+    location = Column(
+        String,
+        nullable=False
+    )
+
+    email = Column(
+        String,
+        unique=True,
+        nullable=False
+    )
