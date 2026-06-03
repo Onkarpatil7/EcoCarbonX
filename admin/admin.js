@@ -563,3 +563,175 @@ if(saveSettingsBtn){
   });
 
 }
+
+async function loadAdminMarketplace(){
+
+    const response = await fetch(
+        "http://127.0.0.1:8000/marketplace"
+    );
+
+    const data = await response.json();
+
+    const table =
+    document.getElementById(
+        "adminMarketplaceTable"
+    );
+
+    table.innerHTML = "";
+
+    data.forEach(company => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${company.company_name}
+                </td>
+
+                <td>
+                    ${company.industry}
+                </td>
+
+                <td>
+                    ${company.credits}
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+loadAdminMarketplace();
+
+async function loadCompanies(){
+
+    const response = await fetch(
+        "http://127.0.0.1:8000/companies"
+    );
+
+    const data = await response.json();
+
+    const tableBody =
+    document.getElementById(
+        "companyTableBody"
+    );
+
+    tableBody.innerHTML = "";
+
+    data.forEach(company => {
+
+        tableBody.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${company.company_name}
+                </td>
+
+                <td>
+                    ${company.industry}
+                </td>
+
+                <td>
+
+                    <button
+                    class="delete-btn"
+                    onclick="deleteCompany(${company.id})">
+
+                        Delete
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+async function addCompany(){
+
+    const companyName =
+    document.getElementById(
+        "companyName"
+    ).value;
+
+    const companyIndustry =
+    document.getElementById(
+        "companyIndustry"
+    ).value;
+
+    await fetch(
+        "http://127.0.0.1:8000/add-company",
+        {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                company_name: companyName,
+
+                industry: companyIndustry
+
+            })
+
+        }
+    );
+
+    alert("Company Added");
+
+    loadCompanies();
+
+}
+
+async function deleteCompany(id){
+
+    await fetch(
+        `http://127.0.0.1:8000/delete-company/${id}`,
+        {
+            method: "DELETE"
+        }
+    );
+
+    alert("Company Deleted");
+
+    loadCompanies();
+
+}
+
+
+
+const API_URL = "http://127.0.0.1:8000";
+
+async function loadDashboardStats(){
+
+    const response = await fetch(
+        `${API_URL}/dashboard-stats`
+    );
+
+    const data = await response.json();
+
+    document.getElementById(
+        "totalCompanies"
+    ).innerText = data.total_companies;
+
+    document.getElementById(
+        "totalTokens"
+    ).innerText = data.total_tokens;
+}
+
+
+loadCompanies();
+loadAdminMarketplace();
+loadDashboardStats();

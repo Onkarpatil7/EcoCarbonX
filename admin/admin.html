@@ -105,9 +105,9 @@
       <div class="cards">
 
         <div class="card green">
-          <h4>Total Companies</h4>
-          <h2>5</h2>
-        </div>
+  <h4>Total Companies</h4>
+  <h2 id="totalCompanies">0</h2>
+</div>
 
         <div class="card blue">
           <h4>Total Emission</h4>
@@ -115,9 +115,9 @@
         </div>
 
         <div class="card orange">
-          <h4>Total Tokens</h4>
-          <h2>8,450</h2>
-        </div>
+  <h4>Total Tokens</h4>
+  <h2 id="totalTokens">0</h2>
+</div>
 
         <div class="card purple">
           <h4>Green Score</h4>
@@ -180,67 +180,23 @@
 
         </div>
 
-        <table id="companyTable">
+        <table>
 
-          <tr>
+    <thead>
+
+        <tr>
             <th>Company</th>
             <th>Industry</th>
             <th>Action</th>
-          </tr>
+        </tr>
 
-          <tr>
-            <td>ABC Industries</td>
-            <td>Manufacturing</td>
+    </thead>
 
-            <td>
-              <button class="delete-btn">
-                Delete
-              </button>
-            </td>
+    <tbody id="companyTableBody">
 
-          </tr>
-          <tr>
-            <td>EcoTech</td>
-            <td>Wind Power Plant</td>
+    </tbody>
 
-            <td>
-              <button class="delete-btn">
-                Delete
-              </button>
-            </td>
-
-          </tr>
-           <tr>
-            <td>GreenPower</td>
-            <td>Water Plant</td>
-
-            <td>
-              <button class="delete-btn">
-                Delete
-              </button>
-            </td> 
-            <tr>
-            <td>FutureX</td>
-            <td>SemiConductor</td>
-
-            <td>
-              <button class="delete-btn">
-                Delete
-              </button>
-            </td>
-
-          </tr>
-           <tr>
-            <td>BuildCo</td>
-            <td>Polycable</td>
-
-            <td>
-              <button class="delete-btn">
-                Delete
-              </button>
-            </td>
-
-        </table>
+</table>
 
       </div>
 
@@ -279,50 +235,21 @@ style="display:none;">
 
     <table>
 
-      <tr>
-        <th>Company</th>
-        <th>Credits</th>
-        <th>Price</th>
-        <th>Action</th>
-      </tr>
+  <thead>
 
-      <tr>
+    <tr>
+      <th>Company</th>
+      <th>Industry</th>
+      <th>Credits</th>
+    </tr>
 
-        <td>EcoTech Industries</td>
+  </thead>
 
-        <td>500 Credits</td>
+  <tbody id="adminMarketplaceTable">
 
-        <td>₹120</td>
+  </tbody>
 
-        <td>
-
-          <button class="buy-btn">
-            BUY
-          </button>
-
-        </td>
-
-      </tr>
-
-      <tr>
-
-        <td>GreenNova Solutions</td>
-
-        <td>320 Credits</td>
-
-        <td>₹110</td>
-
-        <td>
-
-          <button class="buy-btn">
-            BUY
-          </button>
-
-        </td>
-
-      </tr>
-
-    </table>
+</table>
 
   </div>
 

@@ -42,3 +42,16 @@ class CompanyProfile(Base):
         unique=True,
         nullable=False
     )
+
+
+class Marketplace(Base):
+
+    __tablename__ = "marketplace"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    company_name = Column(String, nullable=False)
+
+    industry = Column(String, nullable=False)
+
+    credits = Column(Integer, default=100)

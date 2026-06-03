@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from database import engine, sessionLocal, Base, get_db
 
-from models import Base, User, CompanyProfile
+from models import Base, User, CompanyProfile, Marketplace
 from schemas import (
     UserCreate,
     LoginSchema,
@@ -134,4 +134,101 @@ def create_company_profile(
     return {
         "message":
         "Profile Created Successfully"
+    }
+
+
+@app.get("/marketplace")
+def get_marketplace(db: Session = Depends(get_db)):
+
+    companies = db.query(Marketplace).all()
+
+    result = []
+
+    for company in companies:
+
+        result.append({
+            "company_name": company.company_name,
+            "industry": company.industry,
+            "credits": company.credits
+        })
+
+    return result
+
+@app.post("/add-company")
+def add_company(data: dict, db: Session = Depends(get_db)):
+
+    company = Marketplace(
+
+        company_name=data["company_name"],
+
+        industry=data["industry"],
+
+        credits=100
+    )
+
+    db.add(company)
+
+    db.commit()
+
+    return {
+        "message": "Company added"
+    }
+
+
+@app.get("/companies")
+def get_companies(db: Session = Depends(get_db)):
+
+    companies = db.query(Marketplace).all()
+
+    result = []
+
+    for company in companies:
+
+        result.append({
+
+            "id": company.id,
+
+            "company_name": company.company_name,
+
+            "industry": company.industry,
+
+            "credits": company.credits
+
+        })
+
+    return result
+
+@app.delete("/delete-company/{company_id}")
+def delete_company(
+    company_id: int,
+    db: Session = Depends(get_db)
+):
+
+    company = db.query(Marketplace).filter(
+        Marketplace.id == company_id
+    ).first()
+
+    if company:
+
+        db.delete(company)
+
+        db.commit()
+
+    return {
+        "message": "Company deleted"
+    }
+
+
+@app.get("/dashboard-stats")
+def dashboard_stats(db: Session = Depends(get_db)):
+
+    companies = db.query(Marketplace).all()
+
+    total_companies = len(companies)
+
+    total_tokens = sum(company.credits for company in companies)
+
+    return {
+        "total_companies": total_companies,
+        "total_tokens": total_tokens
     }

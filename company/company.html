@@ -583,36 +583,22 @@
 
         <table>
 
-          <tr>
-            <th>Company</th>
-            <th>Credits</th>
-            <th>Price</th>
-            <th>Action</th>
-          </tr>
+  <thead>
 
-          <tr>
-            <td>EcoTech Industries</td>
-            <td>500</td>
-            <td>₹120</td>
-            <td>
-              <button class="btn buy-btn market-buy">
-                BUY
-              </button>
-            </td>
-          </tr>
+    <tr>
+      <th>Company</th>
+      <th>Credits</th>
+      <th>Price</th>
+      <th>Action</th>
+    </tr>
 
-          <tr>
-            <td>GreenNova</td>
-            <td>320</td>
-            <td>₹110</td>
-            <td>
-              <button class="btn buy-btn market-buy">
-                BUY
-              </button>
-            </td>
-          </tr>
+  </thead>
 
-        </table>
+  <tbody id="marketplaceTableBody">
+
+  </tbody>
+
+</table>
 
       </div>
 
@@ -1245,6 +1231,67 @@ async function updateProfile(){
 
 }
 
+async function loadMarketplace() {
+
+    const response = await fetch(
+        "http://127.0.0.1:8000/marketplace"
+    );
+
+    const data = await response.json();
+
+    const tableBody =
+    document.getElementById(
+        "marketplaceTableBody"
+    );
+
+    tableBody.innerHTML = "";
+
+    data.forEach(company => {
+
+        tableBody.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${company.company_name}
+                </td>
+
+                <td>
+                    ${company.credits}
+                </td>
+
+                <td>
+                    ₹150
+                </td>
+
+                <td>
+
+                <button class="btn buy-btn" id="buy-btn">
+
+                        BUY
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+    });
+
+}
+
+loadMarketplace();
+
+document.addEventListener("click", function(event){
+
+    if(event.target.classList.contains("buy-btn")){
+
+        alert("Credits Purchased Successfully");
+
+    }
+
+});
 </script>
 
 </body>
