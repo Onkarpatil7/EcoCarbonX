@@ -52,33 +52,48 @@ document.querySelectorAll(".content-section");
 
 menuItems.forEach(item => {
 
+    item.addEventListener("click", () => {
 
-  item.addEventListener("click", () => {
+        menuItems.forEach(menu => {
+            menu.classList.remove("active");
+        });
 
-    menuItems.forEach(i => {
+        item.classList.add("active");
 
-      i.classList.remove("active");
+        sections.forEach(section => {
+            section.style.display = "none";
+        });
+
+        const target =
+        item.getAttribute("data-section");
+
+        document.getElementById(target)
+        .style.display = "block";
+
+
+        // FETCH LATEST DATA WHEN SECTION CHANGES
+
+        if(target === "companies-section"){
+
+            loadCompanies();
+
+        }
+
+        if(target === "marketplace-section"){
+
+            loadAdminMarketplace();
+
+        }
+
+        if(target === "dashboard-section"){
+
+            loadDashboardStats();
+
+        }
 
     });
-
-    item.classList.add("active");
-
-    sections.forEach(section => {
-
-      section.style.display = "none";
-
-    });
-
-    const target =
-    item.getAttribute("data-section");
-
-    document.getElementById(target)
-    .style.display = "block";
-
-  });
 
 });
-
 
 
 
@@ -730,7 +745,6 @@ async function loadDashboardStats(){
         "totalTokens"
     ).innerText = data.total_tokens;
 }
-
 
 loadCompanies();
 loadAdminMarketplace();
