@@ -289,7 +289,7 @@ if(analyticsCanvas){
 
         responsive:true,
 
-        maintainAspectRatio:false
+        maintainAspectRatio:true
 
       }
 
