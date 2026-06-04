@@ -17,7 +17,6 @@ class User(Base):
 
 
 class CompanyProfile(Base):
-
     __tablename__ = "company_profiles"
 
     id = Column(Integer,primary_key=True,index=True)
@@ -28,7 +27,6 @@ class CompanyProfile(Base):
 
 
 class Marketplace(Base):
-
     __tablename__ = "marketplace"
 
     id = Column(Integer, primary_key=True, index=True)
